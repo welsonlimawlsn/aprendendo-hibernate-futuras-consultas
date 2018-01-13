@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+
+</h:head>
+<f:metadata>
+    <f:viewAction action="#{veiculoBean.init}"/>
+</f:metadata>
+<h:body>
+    <h:messages/>
+    <p:importEnum type="br.com.welson.hibernate.veiculos.dominio.TipoCombustivel" var="TipoCombustivel" allSuffix="ALL_ENUM_VALUES"/>
+    <h:form>
+        <h:commandButton actionListener="#{criaTabelas.criarTabelas}" value="Criar Tabelas"/>
+        <div>
+            <h:panelGrid columns="2">
+
+                <h:outputLabel value="Nome do proprietario: "/>
+                <h:inputText value="#{veiculoBean.veiculo.proprietario.nome}" required="true"/>
+
+                <h:outputLabel value="Telefone do proprietario: "/>
+                <h:inputText value="#{veiculoBean.veiculo.proprietario.telefone}" required="true"/>
+
+                <h:outputLabel value="Email do proprietario: "/>
+                <h:inputText value="#{veiculoBean.veiculo.proprietario.email}"/>
+
+                <h:outputLabel value="Placa: "/>
+                <h:inputText value="#{veiculoBean.veiculo.id.placa}" required="true"/>
+
+                <h:outputLabel value="Cidade: "/>
+                <h:inputText value="#{veiculoBean.veiculo.id.cidade}" required="true"/>
+
+                <h:outputLabel value="Fabricante: "/>
+                <h:inputText value="#{veiculoBean.veiculo.fabricante}" required="true"/>
+
+                <h:outputLabel value="Modelo: "/>
+                <h:inputText value="#{veiculoBean.veiculo.modelo}" required="true"/>
+
+                <h:outputLabel value="Ano de fabricação: "/>
+                <h:inputText value="#{veiculoBean.veiculo.anoFabricacao}" required="true"/>
+
+                <h:outputLabel value="Ano do modelo: "/>
+                <h:inputText value="#{veiculoBean.veiculo.anoModelo}" required="true"/>
+
+                <h:outputLabel value="Tipo do combustivel: "/>
+                <h:selectOneMenu value="#{veiculoBean.veiculo.tipoCombustivel}" required="true">
+                    <f:selectItems value="#{TipoCombustivel.ALL_ENUM_VALUES}" var="combustivel" itemValue="#{combustivel}" itemLabel="#{combustivel}"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="Especificações: " required="true"/>
+                <h:inputTextarea value="#{veiculoBean.veiculo.especificacoes}"/>
+
+                <h:outputLabel value="Valor: " required="true"/>
+                <h:inputText value="#{veiculoBean.veiculo.valor}"/>
+
+                <h:outputLabel/>
+                <h:commandButton value="Gravar" actionListener="#{veiculoBean.gravar}"/>
+            </h:panelGrid>
+        </div>
+    </h:form>
+
+    <h:form>
+        <h:outputLabel value="Pesquisar proprietario por id: "/>
+        <h:inputText value="#{veiculoBean.idProprietario}" id="id"/>
+        <h:commandButton value="Pesquisar" actionListener="#{veiculoBean.pesquisarPorId}">
+            <f:ajax execute="id" render="panel"/>
+        </h:commandButton>
+        <br/>
+        <h:panelGrid id="panel" columns="2">
+
+            <h:outputText value="Nome proprietario: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.nome}"/>
+
+            <h:outputText value="Fabricante: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.veiculo.fabricante}"/>
+
+            <h:outputText value="Modelo: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.veiculo.modelo}"/>
+
+            <h:outputText value="Ano de Fabricação: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.veiculo.anoFabricacao}"/>
+
+            <h:outputText value="Ano do Modelo: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.veiculo.anoModelo}"/>
+
+            <h:outputText value="Valor: "/>
+            <h:outputText value="#{veiculoBean.proprietarioPesquisado.veiculo.valor}">
+                <f:convertNumber type="currency" locale="pt-br"/>
+            </h:outputText>
+        </h:panelGrid>
+    </h:form>
+
+    <h:form>
+        <h:dataTable var="veiculo" value="#{veiculoBean.veiculos}">
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Data de Cadastro"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.dataCadastro}">
+                    <f:convertDateTime locale="pt-br" type="both"/>
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Proprietario"/>
+                </f:facet>
+                <h:outputText value="Nome: #{veiculo.proprietario.nome}" rendered="#{not veiculo.editando}"/><br/>
+                <h:outputText value="Telefone: #{veiculo.proprietario.telefone}" rendered="#{not veiculo.editando}"/><br/>
+                <h:outputText value="Email: #{veiculo.proprietario.email}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.fabricante}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Fabricante"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.fabricante}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.fabricante}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Modelo"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.modelo}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.modelo}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Tipo de Combustivel"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.tipoCombustivel}" rendered="#{not veiculo.editando}"/>
+                <h:selectOneMenu value="#{veiculo.tipoCombustivel}" rendered="#{veiculo.editando}">
+                    <f:selectItems value="#{TipoCombustivel.ALL_ENUM_VALUES}" var="combustivel" itemValue="#{combustivel}" itemLabel="#{combustivel}"/>
+                </h:selectOneMenu>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Ano de Fabricação"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.anoFabricacao}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.anoFabricacao}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Ano do Modelo"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.anoModelo}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.anoModelo}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Placa"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.id.placa}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.id.placa}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Cidade"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.id.cidade}" rendered="#{not veiculo.editando}"/>
+                <h:inputText value="#{veiculo.id.cidade}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Valor"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.valor}" rendered="#{not veiculo.editando}">
+                    <f:convertNumber type="currency" locale="pt-br"/>
+                </h:outputText>
+                <h:inputText value="#{veiculo.valor}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Especificações"/>
+                </f:facet>
+                <h:outputText value="#{veiculo.especificacoes}" rendered="#{not veiculo.editando}" escape="false"/>
+                <h:inputTextarea value="#{veiculo.especificacoes}" rendered="#{veiculo.editando}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+
+                </f:facet>
+                <h:commandLink value="Alterar" actionListener="#{veiculoBean.editar(veiculo)}"
+                               rendered="#{not veiculo.editando}"/>
+                <h:commandLink value="Salvar" action="#{veiculoBean.salvarEdicao(veiculo)}"
+                               rendered="#{veiculo.editando}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+
+                </f:facet>
+                <h:commandLink value="Excluir" actionListener="#{veiculoBean.excluir(veiculo)}"/>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+</h:body>
+</html>

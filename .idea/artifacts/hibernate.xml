@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="hibernate">
+    <output-path>$PROJECT_DIR$/out/artifacts/hibernate.war</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="CursoHibernate/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="CursoHibernate" />
+          <element id="jpa-descriptors" facet="CursoHibernate/jpa/JPA" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.2.15" />
+          <element id="library" level="project" name="Maven: com.microsoft.sqlserver:mssql-jdbc:6.2.2.jre8" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.1" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
