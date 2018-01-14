@@ -1,6 +1,7 @@
 package br.com.welson.hibernate.veiculos.dominio;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -9,7 +10,7 @@ public class Proprietario {
 
     private Long codigo;
     private String nome;
-    private String telefone;
+    private List<Telefone> telefone = new ArrayList<>();
     private String email;
     private List<Veiculo> veiculos;
 
@@ -19,7 +20,6 @@ public class Proprietario {
 
     public Proprietario(String nome, String telefone, String email) {
         this.nome = nome;
-        this.telefone = telefone;
         this.email = email;
     }
 
@@ -42,12 +42,26 @@ public class Proprietario {
         this.nome = nome;
     }
 
-    @Column(length = 20, nullable = false)
-    public String getTelefone() {
+    /*@ElementCollection
+    @CollectionTable(name = "proprietario_telefone",
+        joinColumns = @JoinColumn(name = "cod_proprietario"))
+    @Column(name = "numero_telefone", length = 20, nullable = false)
+    public List<String> getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(List<String> telefone) {
+        this.telefone = telefone;
+    }*/
+
+    @ElementCollection
+    @CollectionTable(name = "proprietario_telefones", joinColumns = @JoinColumn(name = "cod_proprietario"))
+    @AttributeOverrides({@AttributeOverride(name = "numero", column = @Column(name = "num_telefone", length = 20, nullable = false))})
+    public List<Telefone> getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(List<Telefone> telefone) {
         this.telefone = telefone;
     }
 

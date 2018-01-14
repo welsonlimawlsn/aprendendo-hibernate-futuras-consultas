@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tab_veiculo")
@@ -20,6 +22,7 @@ public class Veiculo {
     private TipoCombustivel tipoCombustivel;
     private Date dataCadastro;
     private String especificacoes;
+    private Set<Acessorio> acessorios = new HashSet<>();
     private boolean editando = false;
 
     public Veiculo() {
@@ -146,6 +149,18 @@ public class Veiculo {
 
     public void setEspecificacoes(String especificacoes) {
         this.especificacoes = especificacoes;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "veiculo_acessorios",
+        joinColumns = @JoinColumn(name = "cod_veiculo"),
+        inverseJoinColumns = @JoinColumn(name = "cod_acessorio"))
+    public Set<Acessorio> getAcessorios() {
+        return acessorios;
+    }
+
+    public void setAcessorios(Set<Acessorio> acessorios) {
+        this.acessorios = acessorios;
     }
 
     @Override
